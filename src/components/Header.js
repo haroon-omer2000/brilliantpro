@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import '../styles/Header.css'
 
 const Header = ({APP_NAME}) => {
   return (
-    <div>
+    <div className='app-header'>
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
             <div className="container-fluid">
                 <Link className='nav-link' to="/">
