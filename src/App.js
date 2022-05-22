@@ -1,7 +1,10 @@
 import './App.css';
 import React, {useState, useEffect} from 'react';
+import Header from './components/Header';
 
 function App() {
+
+  const APP_NAME = 'BrilliantPro';
 
   useEffect(() =>{
     
@@ -20,8 +23,7 @@ function App() {
 
   return (
     <div>
-      <h1>Hello world</h1>
-      <button onClick={test}>Fetch</button>
+     <Header APP_NAME = {APP_NAME} />
     </div>
   );
 }
