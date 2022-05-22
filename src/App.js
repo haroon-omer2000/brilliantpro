@@ -1,6 +1,9 @@
 import './App.css';
 import React, {useState, useEffect} from 'react';
 import Header from './components/Header';
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Login from './components/Login';
+import Register from './components/Register';
 
 function App() {
 
@@ -22,9 +25,13 @@ function App() {
   }
 
   return (
-    <div>
-     <Header APP_NAME = {APP_NAME} />
-    </div>
+    <Router>
+      <Header APP_NAME={APP_NAME} />
+      <Routes>
+        <Route path="/Login" exact element = {<Login />} />
+        <Route path="/Register" exact element = {<Register />} />
+      </Routes>
+    </Router>
   );
 }
 
