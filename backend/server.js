@@ -42,6 +42,23 @@ app.post('/login_user', function (req, res) {
     })
 });
 
+app.get('/courses', function (req, res) {
+    let courses = [];
+    const cursor = db.collection('Courses').find({});
+    cursor.forEach( function (vehicle) { 
+        courses.push(vehicle)
+    }).then( (data) => {
+        console.log("Fetched: ",courses)
+        res.send({courses: courses});
+    });
+});
+
+app.post('/add_course', function (req, res) {
+    console.log("received", req.body);
+    db.collection("Courses").insertOne(req.body);
+    res.send({message:"ok"})
+});
+
 app.listen(4000,()=>{
     console.log('Listening on port 4000');
 });

@@ -22,6 +22,7 @@ const Login = ({setUser}) => {
         body: JSON.stringify(user_login)
     }).then(response => response.json()).then( status => {
         localStorage.setItem('user',status['user']);
+        localStorage.setItem('role',status['role']);
         setUser({
               email: status['user'],
               role: status['role']       
