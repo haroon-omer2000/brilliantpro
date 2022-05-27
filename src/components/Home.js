@@ -22,7 +22,7 @@ const Home = ({user, setUser}) => {
             (user.role === "student") ?
                 <StudentDashboard />
                 : 
-                <Notice notice = {"You need to login before accessing any resource"} style = {"alert alert-info"}/>
+                <Notice notice = {"You need to login before accessing any resource"} style_notice = {"alert alert-info"}/>
             )
         }
     </div>

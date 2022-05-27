@@ -8,7 +8,7 @@ const AddCourse = () => {
 
   const navigate = useNavigate();
 
-  const [courseTitle, setCourseTitle] = useState('');
+  const [title, setTitle] = useState('');
   const [weeks, setWeeks] = useState(1);
   const [overview, setOverview] = useState('');
   const [imageUpload, setImageUpload] = useState(null);
@@ -28,7 +28,7 @@ const AddCourse = () => {
   const addCourse = async(url) => {
 
     const course_info = {
-        courseTitle,
+        title,
         weeks,
         overview,
         url
@@ -51,8 +51,8 @@ const AddCourse = () => {
         <h2 className='page-header'>Enter course details</h2>
         <form onSubmit={uploadImage}>
             <div className="mb-3">
-                <label htmlFor="courseTitle" className="form-label">Course Title</label>
-                <input onChange={(e) => {setCourseTitle(e.target.value)}} required type="text" className="form-control"  placeholder='Course title...' />
+                <label htmlFor="title" className="form-label">Course Title</label>
+                <input onChange={(e) => {setTitle(e.target.value)}} required type="text" className="form-control"  placeholder='Course title...' />
             </div>
             <div className="mb-3">
                 <label htmlFor="courseOverview" className="form-label">Course Overview</label>

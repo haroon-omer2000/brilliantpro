@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Notice = ({notice, style}) => {
+const Notice = ({notice, style_notice}) => {
   return (
-    <div className={style} role="alert">
+    <div className={style_notice} role="alert">
         {notice}
     </div>
   )

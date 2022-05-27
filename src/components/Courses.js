@@ -23,11 +23,11 @@ const Courses = () => {
                  
                 courses.map((course) => {
                     return (
-                        <Course key = {course._id} id = {course._id} title = {course.courseTitle} weeks = {course.weeks} overview = {course.overview} url = {course.url} />
+                        <Course key = {course._id} id = {course._id} title = {course.title} weeks = {course.weeks} overview = {course.overview} url = {course.url} />
                     )
                 }))
             :
-                <Notice notice = {"There are no available courses"} style = {"alert alert-warning"} />
+                <Notice notice = {"There are no available courses"} style_notice = {"alert alert-warning"} />
         }
         </div>
 

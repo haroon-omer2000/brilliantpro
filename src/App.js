@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
 import AddCourse from './components/AddCourse';
+import DisplayCourse from './components/DisplayCourse';
 
 function App() {
 
@@ -40,7 +41,8 @@ function App() {
             <Route path="/" exact element = {<Home user = {user} setUser = {setUser} />} />
             <Route path="/Login" exact element = {<Login setUser = {setUser} />} />
             <Route path="/Register" exact element = {<Register />} />
-            <Route path="/AddCourse" exact element = {<AddCourse />} />            
+            <Route path="/AddCourse" exact element = {<AddCourse />} />  
+            <Route path="/Courses/:id" element = {<DisplayCourse />} />           
         </Routes>
         </div>
       </Router>

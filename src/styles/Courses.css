@@ -2,3 +2,9 @@
     height: 250px;
     width: 100%;
 }
+
+.card-option{
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
