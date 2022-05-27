@@ -5,7 +5,8 @@ app.use(cors());
 
 let bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-  
+var ObjectId = mongoose.Types.ObjectId;
+
 var mongoDB = 'mongodb://localhost:27017/Web-Project';
 
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -29,7 +30,7 @@ app.post('/login_user', function (req, res) {
          if (user)
              res.send({message: "logged_in", user: user.email, role: user.role})
          else
-         res.send({message: "INVALID_CREDENTIALS", user: "", role: ""});
+            res.send({message: "INVALID_CREDENTIALS", user: "", role: ""});
     }).catch((err) => {
         res.send({message: err, user: "", role: ""});
     })
@@ -52,7 +53,20 @@ app.post('/add_course', function (req, res) {
 
 app.get('/courses/:id', function (req, res) {
     console.log("yehh",req.params);
-    res.send({message:"ok"})
+    db.collection("Courses").findOne({_id: new ObjectId(req.params.id)}).then( (course) => {
+        res.send({course: course})
+    })
+});
+
+app.put('/courses/:id', function (req, res) {
+    console.log("yehh",req.body);
+    db.collection("Courses").updateOne({_id: new ObjectId(req.params.id)},{$set:req.body})
+    .then(     
+        res.send({message:"Successful updation"})
+    )
+    .catch( (err) => {
+        res.send({message:"Unsuccessful updation"})
+    });
 });
 
 app.listen(4000,()=>{

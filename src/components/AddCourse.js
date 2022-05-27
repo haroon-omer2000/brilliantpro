@@ -26,15 +26,14 @@ const AddCourse = () => {
   }
 
   const addCourse = async(url) => {
-
     const course_info = {
         title,
         weeks,
         overview,
         url
-      };
+    };
 
-      const response = await fetch('http://localhost:4000/add_course',{
+    fetch('http://localhost:4000/add_course',{
         method: "POST",
         headers: {
             "Content-Type":"application/json"

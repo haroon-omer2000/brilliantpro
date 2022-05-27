@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
+import '../styles/Courses.css'
 
 const DisplayCourse = () => {
   
@@ -12,13 +13,16 @@ const DisplayCourse = () => {
 
   useEffect(() => {
     fetch(`http://localhost:4000/courses/${params.id}`).then(response => response.json()).then( status => {
-        console.log(status);
+        setTitle(status['course'].title);
+        setWeeks(status['course'].weeks);
+        setOverview(status['course'].overview);
+        setUrl(status['course'].url);
     });
   },[])
 
   return (
     <div className="card h-100 text-center">
-        {/* <img src={url} className="courses-img card-img-top" alt='...'/>
+     <img src={url} className="courses-img card-img-top" alt='...'/>
         <div className="card-body">
           <h5 className="card-title">{title}</h5>
           <p className="card-text">{overview}</p>
@@ -26,7 +30,7 @@ const DisplayCourse = () => {
         </div>
         <div className='card-option'>
           <button className="btn btn-primary" type="submit">Details</button>
-        </div> */}
+        </div> 
     </div>
   )
 }
