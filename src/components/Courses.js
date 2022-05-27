@@ -9,7 +9,6 @@ const Courses = () => {
 
   useEffect(() => {
     fetch('http://localhost:4000/courses').then(response => response.json()).then( status => {
-       console.log(status);
        setCourses(status['courses']);
     });
   },[])

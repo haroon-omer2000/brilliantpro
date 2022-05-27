@@ -13,8 +13,8 @@ const Course = ({id, title, weeks, overview, url}) => {
           <p className="card-text"><strong>Completion time: </strong>{weeks} weeks</p>
         </div>
         <div className='card-option'>
-          <Link className='nav-link' to={"/Courses/" + id} >
-            <button class="btn btn-primary" type="submit">Show</button>
+          <Link className='nav-link' to={"/Courses/" + id} params={{id: id}} >
+            <button className="btn btn-primary" type="submit">Show</button>
           </Link>
         </div>
       </div>

@@ -42,7 +42,7 @@ function App() {
             <Route path="/Login" exact element = {<Login setUser = {setUser} />} />
             <Route path="/Register" exact element = {<Register />} />
             <Route path="/AddCourse" exact element = {<AddCourse />} />  
-            <Route path="/Courses/:id" element = {<DisplayCourse />} />           
+            <Route path="/Courses/:id" exact element = {<DisplayCourse />} />           
         </Routes>
         </div>
       </Router>
