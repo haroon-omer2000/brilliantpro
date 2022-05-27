@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 const AddCourse = () => {
+
+  const navigate = useNavigate();
 
   const [courseTitle, setCourseTitle] = useState('');
   const [weeks, setWeeks] = useState(1);
@@ -39,6 +42,7 @@ const AddCourse = () => {
         body: JSON.stringify(course_info)
     }).then(response => response.json()).then(status => {
         console.log(status);
+        navigate("/");
     });
   }
 
