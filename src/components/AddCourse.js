@@ -16,9 +16,7 @@ const AddCourse = () => {
   const uploadImage = async(e) => {
     e.preventDefault();
     const imageRef = ref(storage, `course_banners/${imageUpload.name + v4()}`); 
-    console.log(imageRef);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
-        console.log('uploaded');
         getDownloadURL(snapshot.ref).then( url => {
             addCourse(url);
         })
@@ -40,7 +38,6 @@ const AddCourse = () => {
         },
         body: JSON.stringify(course_info)
     }).then(response => response.json()).then(status => {
-        console.log(status);
         navigate("/");
     });
   }

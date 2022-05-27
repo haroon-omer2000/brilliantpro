@@ -22,17 +22,6 @@ function App() {
     
   },[])
 
-  const test = async () => {
-    fetch('http://localhost:4000/test',{
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       }
-    }).then((response) => response.json()).then( data => {
-         console.log(data); 
-      })
-  }
-
   return (
     <div>
       <Router>

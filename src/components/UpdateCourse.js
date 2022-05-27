@@ -33,7 +33,6 @@ const UpdateCourse = () => {
         },
         body: JSON.stringify(course_info)
     }).then(response => response.json()).then(status => {
-        console.log(status);
         navigate("/");
     });
   }
@@ -44,7 +43,7 @@ const UpdateCourse = () => {
         <form onSubmit={updateCourse}>
             <div className="mb-3">
                 <label htmlFor="title" className="form-label">Course Title</label>
-                <input onChange={(e) => {setTitle(e.target.value); console.log(title)}} required type="text" value={title} className="form-control"  placeholder='Course title...' />
+                <input onChange={(e) => {setTitle(e.target.value)}} required type="text" value={title} className="form-control"  placeholder='Course title...' />
             </div>
             <div className="mb-3">
                 <label htmlFor="courseOverview" className="form-label">Course Overview</label>
