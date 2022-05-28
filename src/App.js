@@ -9,6 +9,7 @@ import AddCourse from './components/AddCourse';
 import DisplayCourse from './components/DisplayCourse';
 import UpdateCourse from './components/UpdateCourse';
 import Quizzes from './components/Quizzes';
+import DisplayQuiz from './components/DisplayQuiz';
 
 function App() {
 
@@ -35,7 +36,8 @@ function App() {
             <Route path="/AddCourse" exact element = {<AddCourse />} />  
             <Route path="/Courses/:id" exact element = {<DisplayCourse />} />   
             <Route path="/Courses/:id/Update" exact element = {<UpdateCourse />} />      
-            <Route path="/Courses/:id/Quizzes" exact element = {<Quizzes />} />      
+            <Route path="/Courses/:id/Quizzes" exact element = {<Quizzes />} /> 
+            <Route path="/Courses/:id/Quizzes/:course_id" exact element = {<DisplayQuiz />} />           
         </Routes>
         </div>
       </Router>

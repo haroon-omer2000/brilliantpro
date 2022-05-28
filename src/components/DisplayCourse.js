@@ -21,16 +21,16 @@ const DisplayCourse = () => {
   },[])
 
   return (
-    <div class="accordion" id="accordionPanelsStayOpenExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+    <div className="accordion" id="accordionPanelsStayOpenExample">
+      <div className="accordion-item">
+        <h2 className="accordion-header" id="panelsStayOpen-headingOne">
+          <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
             {title}
           </button>
         </h2>
-        <img src={url} class="rounded flex-start" alt="..." />
-        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-          <div class="accordion-body">
+        <img src={url} className="rounded flex-start" alt="..." />
+        <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+          <div className="accordion-body">
             <div className='course-content'>
               <strong className='course-show-heading'>Overview</strong>{overview}
               <p><strong className='course-show-heading'>Weeks to complete: </strong>{weeks}</p>
@@ -38,15 +38,15 @@ const DisplayCourse = () => {
           </div>
         </div>
       </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+      <div className="accordion-item">
+        <h2 className="accordion-header" id="panelsStayOpen-headingTwo">
+          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
             Course Resources
           </button>
         </h2>
-        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-          <div class="accordion-body">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+          <div className="accordion-body">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes"} params={{id: params.id}} >
                 <p>Quizzes</p>
               </Link>

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
+import Quiz from './Quiz';
 
 const Quizzes = () => {
 
@@ -14,13 +15,13 @@ const Quizzes = () => {
   },[]);
 
   return (
-    <div>Quizzes{params.id}==
-    
+    <div>   
+        <h2 className='page-header'>Quizzes</h2>
     {
         quizzes.length !==0 ?
             quizzes.map((quiz) => {
                 return (
-                    <p>{quiz.title}</p>
+                    <Quiz key = {quiz._id} quiz = {quiz} />
                 )
             })
         : 
