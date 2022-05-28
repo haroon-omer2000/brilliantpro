@@ -67,6 +67,19 @@ app.put('/courses/:id', function (req, res) {
     });
 });
 
+app.get('/courses/:id/Quizzes', function (req, res) {
+    let quizzes = [];
+    db.collection("Courses").findOne({_id: new ObjectId(req.params.id)}).then( (course) => {
+        course.quizzes.forEach( function(quiz) {
+            db.collection("Quizzes").findOne({_id: quiz}).then((quiz)=>{
+                quizzes.push(quiz);
+                if (quizzes.length ==  course.quizzes.length)
+                    res.send({quizzes: quizzes});
+            })
+        });       
+    });
+});
+
 app.listen(4000,()=>{
     console.log('Listening on port 4000');
 });

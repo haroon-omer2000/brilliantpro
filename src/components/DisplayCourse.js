@@ -41,7 +41,7 @@ const DisplayCourse = () => {
       <div class="accordion-item">
         <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-            Course Assesments
+            Course Resources
           </button>
         </h2>
         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
@@ -51,24 +51,8 @@ const DisplayCourse = () => {
                 <p>Quizzes</p>
               </Link>
               <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes"} params={{id: params.id}} >
-                <p>Assignments</p>
+                <p>Assignments/Materials</p>
               </Link>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-            Course Materials
-          </button>
-        </h2>
-        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-          <div class="accordion-body">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="#">View Materials</a>
-              </li>
             </ul>
           </div>
         </div>
