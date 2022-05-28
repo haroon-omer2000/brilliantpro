@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import '../styles/Courses.css'
 
 const DisplayCourse = () => {
@@ -47,12 +47,12 @@ const DisplayCourse = () => {
         <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
           <div class="accordion-body">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Quizzes</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Assignments</a>
-              </li>
+              <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes"} params={{id: params.id}} >
+                <p>Quizzes</p>
+              </Link>
+              <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes"} params={{id: params.id}} >
+                <p>Assignments</p>
+              </Link>
             </ul>
           </div>
         </div>
@@ -74,17 +74,6 @@ const DisplayCourse = () => {
         </div>
       </div>
     </div>
-    // <div className="card h-100 text-center">
-    //  <img src={url} className="courses-img card-img-top" alt='...'/>
-    //     <div className="card-body">
-    //       <h5 className="card-title">{title}</h5>
-    //       <p className="card-text">{overview}</p>
-    //       <p className="card-text"><strong>Completion time: </strong>{weeks} weeks</p>
-    //     </div>
-    //     <div className='card-option'>
-    //       <button className="btn btn-primary" type="submit">Details</button>
-    //     </div> 
-    // </div>
   )
 }
 

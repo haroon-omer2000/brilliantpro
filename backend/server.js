@@ -52,14 +52,12 @@ app.post('/add_course', function (req, res) {
 });
 
 app.get('/courses/:id', function (req, res) {
-    console.log("yehh",req.params);
     db.collection("Courses").findOne({_id: new ObjectId(req.params.id)}).then( (course) => {
         res.send({course: course})
     })
 });
 
 app.put('/courses/:id', function (req, res) {
-    console.log("yehh",req.body);
     db.collection("Courses").updateOne({_id: new ObjectId(req.params.id)},{$set:req.body})
     .then(     
         res.send({message:"Successful updation"})
