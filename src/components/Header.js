@@ -17,6 +17,7 @@ const Header = ({APP_NAME, user, setUser}) => {
           role: ''
       });
       localStorage.setItem('user', '');
+      localStorage.setItem('role', '');
   }
 
   return (
@@ -32,7 +33,7 @@ const Header = ({APP_NAME, user, setUser}) => {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         {
-                            (user.role === "admin") ?
+                            (user.role === "admin" && user.email) ?
                                 <ul className="navbar-nav">
                                     <Link className='nav-link' to = "/AddCourse">
                                         <p className="nav-link">Add Course</p>

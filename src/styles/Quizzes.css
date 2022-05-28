@@ -1,3 +1,15 @@
-.quiz{
+.quiz {
+    margin-bottom: 50px;
+}
+
+.question {
+    margin-bottom: 50px;
+}
+
+.quiz-sbt {
+    margin-bottom: 50px;
+}
+
+.add-quiz-btn {
     margin-bottom: 50px;
 }

@@ -70,14 +70,25 @@ app.put('/courses/:id', function (req, res) {
 app.get('/courses/:id/Quizzes', function (req, res) {
     let quizzes = [];
     db.collection("Courses").findOne({_id: new ObjectId(req.params.id)}).then( (course) => {
-        course.quizzes.forEach( function(quiz) {
-            db.collection("Quizzes").findOne({_id: quiz}).then((quiz)=>{
-                quizzes.push(quiz);
-                if (quizzes.length ==  course.quizzes.length)
-                    res.send({quizzes: quizzes});
-            })
-        });       
+        if (course.quizzes){
+            course.quizzes.forEach( function(quiz) {
+                db.collection("Quizzes").findOne({_id: quiz}).then((quiz)=>{
+                    quizzes.push(quiz);
+                    if (quizzes.length ==  course.quizzes.length)
+                        res.send({quizzes: quizzes});
+                })
+            });
+        } else {
+            res.send({quizzes: []})
+        }       
     });
+});
+
+app.get('/courses/:course_id/Quizzes/:id', function (req, res) {
+    console.log("rex",req.params);
+    db.collection("Quizzes").findOne({_id: new ObjectId(req.params.id)}).then( (quiz) => {
+        res.send({quiz: quiz})
+    })
 });
 
 app.listen(4000,()=>{

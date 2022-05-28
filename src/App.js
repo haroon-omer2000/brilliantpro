@@ -37,7 +37,7 @@ function App() {
             <Route path="/Courses/:id" exact element = {<DisplayCourse />} />   
             <Route path="/Courses/:id/Update" exact element = {<UpdateCourse />} />      
             <Route path="/Courses/:id/Quizzes" exact element = {<Quizzes />} /> 
-            <Route path="/Courses/:id/Quizzes/:course_id" exact element = {<DisplayQuiz />} />           
+            <Route path="/Courses/:course_id/Quizzes/:id" exact element = {<DisplayQuiz />} />           
         </Routes>
         </div>
       </Router>
