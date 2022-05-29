@@ -85,7 +85,6 @@ app.get('/courses/:id/Quizzes', function (req, res) {
 });
 
 app.get('/courses/:course_id/Quizzes/:id', function (req, res) {
-    console.log("rex",req.params);
     db.collection("Quizzes").findOne({_id: new ObjectId(req.params.id)}).then( (quiz) => {
         res.send({quiz: quiz})
     })

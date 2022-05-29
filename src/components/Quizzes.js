@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Quiz from './Quiz';
 import '../styles/Quizzes.css';
 
@@ -31,7 +31,9 @@ const Quizzes = () => {
         <h2 className='page-header'>Quizzes</h2>
         {
             (user.role === "admin") ?
-                <button className='btn btn-info add-quiz-btn'>Add Quiz</button>
+                <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes/new"} params={{id: params.id}} >
+                    <button className='btn btn-info add-quiz-btn' type="submit">Add Quiz</button>
+                </Link>
             :
                 false
         }
