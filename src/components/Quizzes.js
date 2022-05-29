@@ -28,7 +28,7 @@ const Quizzes = () => {
 
   return (
     <div>   
-        <h2 className='page-header'>Quizzes</h2>
+        <h2 className='page-header'>Quizzes ({quizzes.length})</h2>
         {
             (user.role === "admin") ?
                 <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes/new"} params={{id: params.id}} >
@@ -37,16 +37,16 @@ const Quizzes = () => {
             :
                 false
         }
-    {
-        quizzes.length !==0 ?
-            quizzes.map((quiz) => {
-                return (
-                    <Quiz key = {quiz._id} quiz = {quiz} />
-                )
-            })
-        : 
-            false
-    }
+        {
+            quizzes.length !==0 ?
+                quizzes.map((quiz) => {
+                    return (
+                        <Quiz key = {quiz._id} quiz = {quiz} />
+                    )
+                })
+            : 
+                false
+        }
     </div>
     
   )

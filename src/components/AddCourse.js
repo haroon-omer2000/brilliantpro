@@ -24,6 +24,7 @@ const AddCourse = () => {
   }
 
   const addCourse = async(url) => {
+    
     const course_info = {
         title,
         weeks,

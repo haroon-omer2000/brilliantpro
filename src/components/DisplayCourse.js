@@ -50,7 +50,7 @@ const DisplayCourse = () => {
               <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes"} params={{id: params.id}} >
                 <p>Quizzes</p>
               </Link>
-              <Link className='nav-link' to={"/Courses/" + params.id + "/Quizzes"} params={{id: params.id}} >
+              <Link className='nav-link' to={"/Courses/" + params.id + "/Assessments"} params={{id: params.id}} >
                 <p>Assignments/Materials</p>
               </Link>
             </ul>
