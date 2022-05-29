@@ -90,6 +90,11 @@ app.get('/courses/:course_id/Quizzes/:id', function (req, res) {
     })
 });
 
+app.post('/courses/:id/Quizzes/new', function (req, res) {
+    console.log(req.body,req.params.id);
+    res.send({message: "ok"})
+});
+
 app.listen(4000,()=>{
     console.log('Listening on port 4000');
 });
