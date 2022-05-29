@@ -1,11 +1,13 @@
 import { async } from '@firebase/util';
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/Quizzes.css';
 
 const AddQuiz = () => {
 
   const params = useParams();
+  const navigate = useNavigate();  
+
   const [title, setTitle] = useState('');
   const [questions, setQuestions] = useState([
       {
@@ -77,7 +79,7 @@ const AddQuiz = () => {
     },
     body: JSON.stringify(quiz_data)
     }).then(response => response.json()).then(status => {
-        console.log(status);
+        navigate(-1);
     });
   }
 
@@ -93,7 +95,6 @@ const AddQuiz = () => {
             <div>
             {
                 (questions.length !== 0) ? 
-
                     
                     questions.map((question, index) => {
                         return (
@@ -108,10 +109,6 @@ const AddQuiz = () => {
                                                 <div key={i} >
                                                     <input onChange={(e) => handleOptionChange(index, i, e)} required type="text" placeholder='option value...' className="form-control" />
                                                 </div>
-                                                // <div  onChange={(e) => markCorrect(index, i)} className='form-check form-check-inline question-text' key = {i} >
-                                                //     {/* <inputclassName="form-check-input" type="radio" name={question.question}/> */}
-                                                //     <input onChange = { (e) => handleOptionChange(index, i, e)} value = {option.option} className='form-control' />
-                                                // </div>
                                             )
                                         })
                                     }
