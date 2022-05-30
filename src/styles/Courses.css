@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.course-img {
+    width: 20%;
+}
+
 .card-option{
     display: flex;
     justify-content: space-evenly;

@@ -28,7 +28,7 @@ const DisplayCourse = () => {
             {title}
           </button>
         </h2>
-        <img src={url} className="rounded flex-start" alt="..." />
+        <img src={url} className="course-img rounded flex-start" alt="..." />
         <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
           <div className="accordion-body">
             <div className='course-content'>
