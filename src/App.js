@@ -14,6 +14,7 @@ import AddQuiz from './components/AddQuiz';
 import Assessments from './components/Assessments';
 import AddAssessment from './components/AddAssessment';
 import Materials from './components/Materials';
+import AddMaterial from './components/AddMaterial';
 
 function App() {
 
@@ -45,7 +46,8 @@ function App() {
             <Route path="/Courses/:id/Quizzes/new" exact element = {<AddQuiz />} /> 
             <Route path="/Courses/:id/Assessments" exact element = {<Assessments />} />     
             <Route path="/Courses/:id/Assessments/new" exact element = {<AddAssessment />} />  
-            <Route path="/Courses/:id/Materials" exact element = {<Materials />} />        
+            <Route path="/Courses/:id/Materials" exact element = {<Materials />} />       
+            <Route path="/Courses/:id/Materials/new" exact element = {<AddMaterial />} />   
         </Routes>
         </div>
       </Router>

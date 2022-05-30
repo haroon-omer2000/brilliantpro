@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -15,8 +15,8 @@ const Assesments = () => {
 
   const uploadContent = async(e) => {
     e.preventDefault();
-    const imageRef = ref(storage, `course_materials/${contentUpload.name + v4()}`); 
-    uploadBytes(imageRef, contentUpload).then((snapshot) => {
+    const assessmentRef = ref(storage, `course_materials/${contentUpload.name + v4()}`); 
+    uploadBytes(assessmentRef, contentUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then( url => {
           addAssessment(url);
       });
@@ -46,6 +46,7 @@ const Assesments = () => {
 
   return (
     <div>
+        <h2 className='page-header'>Enter assessment details</h2>
         <form onSubmit={uploadContent}>
             <div className="mb-3">
                 <label htmlFor="title" className="form-label">Assesment Title</label>

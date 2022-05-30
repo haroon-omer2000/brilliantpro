@@ -123,7 +123,6 @@ app.get('/courses/:id/Assessments', function (req, res) {
 });
 
 app.post('/courses/:id/Assessments/new', function (req, res) {
-    console.log(req.body,req.params.id);
     db.collection("Assessments").insertOne(req.body, function (err){
         if (err) 
             res.send({message: "UNSUCCESSFUL"})
@@ -131,6 +130,38 @@ app.post('/courses/:id/Assessments/new', function (req, res) {
             db.collection("Courses").findOneAndUpdate(
                 { _id: new ObjectId(req.params.id)}, 
                 { $push: { assessments: new ObjectId(req.body._id) } }
+            ).then((data)=>{
+                res.send({message: "ok"})
+            })
+        }
+    });
+});
+
+app.get('/courses/:id/Materials', function (req, res) {
+    let materials = [];
+    db.collection("Courses").findOne({_id: new ObjectId(req.params.id)}).then( (course) => {
+        if (course.materials){
+            course.materials.forEach( function(material) {
+                db.collection("Materials").findOne({_id: material}).then((material)=>{
+                    materials.push(material);
+                    if (materials.length ==  course.materials.length)
+                        res.send({materials: materials});
+                })
+            });
+        } else {
+            res.send({materials: []})
+        }       
+    });
+});
+
+app.post('/courses/:id/Materials/new', function (req, res) {
+    db.collection("Materials").insertOne(req.body, function (err){
+        if (err) 
+            res.send({message: "UNSUCCESSFUL"})
+        else {
+            db.collection("Courses").findOneAndUpdate(
+                { _id: new ObjectId(req.params.id)}, 
+                { $push: { materials: new ObjectId(req.body._id) } }
             ).then((data)=>{
                 res.send({message: "ok"})
             })

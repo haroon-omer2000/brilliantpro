@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import { useParams, Link } from 'react-router-dom';
+import Material from './Material';
 
 const Materials = () => {
 
@@ -16,6 +17,10 @@ const Materials = () => {
     email: localStorage.getItem('user'),
     role: localStorage.getItem('role')
     });
+
+    fetch(`http://localhost:4000/courses/${params.id}/Materials`).then(response => response.json()).then( status => {
+        setMaterials(status['materials']);
+    });
   },[]);
 
   return (
@@ -27,6 +32,16 @@ const Materials = () => {
                     <button className='btn btn-info add-quiz-btn' type="submit">Add Material</button>
                 </Link>
             :
+                false
+        }
+        {
+            materials.length !==0 ?
+                materials.map((material) => {
+                    return (
+                        <Material key = {material._id} material = {material} />
+                    )
+                })
+            : 
                 false
         }
     </div>
