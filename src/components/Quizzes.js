@@ -15,12 +15,10 @@ const Quizzes = () => {
 
   useEffect(() => {
     setUser({
-        email: localStorage.getItem('user'),
-        role: localStorage.getItem('role')
+      email: localStorage.getItem('user'),
+      role: localStorage.getItem('role')
     });
-  },[])
 
-  useEffect(() => {
     fetch(`http://localhost:4000/courses/${params.id}/Quizzes`).then(response => response.json()).then( status => {
         setQuizzes(status['quizzes']);
     });
