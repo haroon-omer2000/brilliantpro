@@ -39,7 +39,7 @@ const Course = ({id, title, weeks, overview, url, price}) => {
               </div>
             :
             <Link className='nav-link' to={"/Courses/" + id} params={{id: id}} >
-                <button className="btn btn-primary" type="submit">Show</button>
+                <button className="btn btn-primary" type="submit">Enroll</button>
             </Link>
           }
         </div>
