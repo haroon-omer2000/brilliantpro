@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import '../styles/Header.css'
 
 const Header = ({APP_NAME, user, setUser}) => {
 

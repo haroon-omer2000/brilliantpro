@@ -25,7 +25,7 @@ const Materials = () => {
 
   return (
     <div>
-        <h2 className='page-header'>Materials</h2>
+        <h2 className='page-header'>Materials ({materials.length})</h2>
         {
             (user.role === "admin") ?
                 <Link className='nav-link' to={"/Courses/" + params.id + "/Materials/new"} params={{id: params.id}} >

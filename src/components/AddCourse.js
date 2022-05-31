@@ -10,6 +10,7 @@ const AddCourse = () => {
 
   const [title, setTitle] = useState('');
   const [weeks, setWeeks] = useState(1);
+  const [price, setPrice] = useState(5);
   const [overview, setOverview] = useState('');
   const [imageUpload, setImageUpload] = useState(null);
 
@@ -29,6 +30,7 @@ const AddCourse = () => {
         title,
         weeks,
         overview,
+        price,
         url
     };
 
@@ -58,6 +60,10 @@ const AddCourse = () => {
             <div className="mb-3">
                 <label htmlFor="customRange3" className="form-label">Weeks: {weeks}</label>
                 <input onChange={(e) => setWeeks(e.target.value)} required type="range" className="form-range" min="1" max="5" step="1" value={weeks} id="customRange3"/>
+            </div>
+            <div className="mb-3">
+              <label className="form-label" htmlFor="price">Enter price in USD (5$ - 200$):</label>
+              <input onChange={(e) => setPrice(e.target.value)} className="form-control" required type="number" id="quantity" name="quantity" min="5" max="1000" step="0.5"/>
             </div>
             <div>
                 <label htmlFor="formFileLg" className="form-label">Upload course banner</label>

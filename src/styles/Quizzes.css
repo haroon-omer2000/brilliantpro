@@ -25,3 +25,12 @@
 .input-space {
     margin-bottom: 30px;
 }
+
+.quiz-correct {
+    display: flex;
+}
+
+.correct-answer {
+    color: green;
+    margin-left: 10px;
+}

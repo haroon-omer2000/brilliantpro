@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../styles/Courses.css';
 import { Link } from 'react-router-dom';
 
-const Course = ({id, title, weeks, overview, url}) => {
+const Course = ({id, title, weeks, overview, url, price}) => {
 
  const [user, setUser] = useState({
    email: null,
@@ -24,6 +24,7 @@ const Course = ({id, title, weeks, overview, url}) => {
           <h5 className="card-title">{title}</h5>
           <p className="card-text">{overview}</p>
           <p className="card-text"><strong>Completion time: </strong>{weeks} weeks</p>
+          <p className="card-text"><strong>Price: </strong>{price}$</p>
         </div>
         <div>       
           {

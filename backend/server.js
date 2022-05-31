@@ -47,7 +47,7 @@ app.get('/courses', function (req, res) {
 });
 
 app.post('/add_course', function (req, res) {
-    db.collection("Quizzes").insertOne(req.body);
+    db.collection("Courses").insertOne(req.body);
     res.send({message:"ok"})
 });
 
