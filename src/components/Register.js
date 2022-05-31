@@ -18,7 +18,7 @@ const Register = () => {
         },
         body: JSON.stringify(user_registration)
     }).then(response => response.json()).then( status => {
-        console.log(status['message']);
+
     });
   }
 

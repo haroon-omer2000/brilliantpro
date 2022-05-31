@@ -1,12 +1,29 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import AdminDashboard from './AdminDashboard';
+import Notice from './Notice';
+import StudentDashboard from './StudentDashboard';
 
-const Home = ({user}) => {
+const Home = ({user, setUser}) => {
+
+  useEffect(() => {
+    setUser({
+        email: localStorage.getItem('user'),
+        role: localStorage.getItem('role')
+    });
+  },[])
+
   return (
     <div>
-        <h2 className='page-header'>Home</h2>
-        { (!user.email)?
-            <p>nil</p>
-            : <p>{user.email} {user.role}</p>
+        {
+            (user.role === "admin") ?
+                <AdminDashboard />
+            :
+            (
+            (user.role === "student") ?
+                <StudentDashboard />
+                : 
+                <Notice notice = {"You need to login before accessing any resource"} style_notice = {"alert alert-info"}/>
+            )
         }
     </div>
   )
