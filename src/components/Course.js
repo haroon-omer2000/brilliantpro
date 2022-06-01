@@ -40,7 +40,7 @@ const Course = ({id, title, weeks, overview, url, price}) => {
                 </Link>
               </div>
             :
-            <Link className='nav-link' to={"/Courses/" + id + "/Payment"} params={{id: id}} >
+            <Link className='nav-link' to={"/Courses/" + id + "/Payment"} state={{price: price, user_id: user.id, course_id: id}} >
                 <button className="btn btn-primary" type="submit">Enroll</button>
             </Link>
           }
