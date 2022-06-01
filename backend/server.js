@@ -184,18 +184,26 @@ app.post('/courses/:id/Payment', function (req, res) {
 app.get('/courses/:id/EnrolledUsers', function (req, res) {
     let enrolled_users = [];
     db.collection("Enrollments").findOne({}).then((enrolled)=>{
-        if (enrolled && enrolled.Courses[req.params.id]){
-           enrolled.Courses[req.params.id].forEach((user_obj) => {
-            db.collection("Users").findOne({_id: new ObjectId(user_obj.user_id)}).then( (user) => {
-                enrolled_users.push({id: user._id, email: user.email, enrollment_date: user_obj.enrollment_date});
-                if (enrolled_users.length == enrolled.Courses[req.params.id].length)
-                    res.send({enrolled_users: enrolled_users})
+        try {
+           if ((enrolled && enrolled.Courses[req.params.id])) {
+                enrolled.Courses[req.params.id].forEach((user_obj) => {
+                    db.collection("Users").findOne({_id: new ObjectId(user_obj.user_id)}).then( (user) => {
+                        enrolled_users.push({id: user._id, email: user.email, enrollment_date: user_obj.enrollment_date});
+                        if (enrolled_users.length == enrolled.Courses[req.params.id].length)
+                            res.send({enrolled_users: enrolled_users})
+                        })
                 })
-           })
-        } else {
+            }
+        } catch (err) {
             res.send({enrolled_users: []})
         }
     })
+});
+
+app.delete('/Unenroll', function (req, res) {
+    db.collection("Enrollments").updateMany({}, {$pull: {[`Courses.${req.body.course_id}`]: {'user_id': new ObjectId(req.body.user_id)}}} )
+    db.collection("Enrollments").updateMany({}, {$pull: {[`Students.${req.body.user_id}`]: {'course_id': new ObjectId(req.body.course_id)}}} )
+    res.send({message: "ok"})
 });
 
 app.listen(4000,()=>{
