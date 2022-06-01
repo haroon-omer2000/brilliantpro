@@ -171,14 +171,31 @@ app.post('/courses/:id/Materials/new', function (req, res) {
 
 app.post('/courses/:id/Payment', function (req, res) {
     var query = {};
-    var update = { $push: {[`Courses.${req.body.course_id}`]: {user_id: req.body.user_id, enrollment_date: req.body.enrollment_date}}};
+    var update = { $push: {[`Courses.${req.body.course_id}`]: {user_id: new ObjectId(req.body.user_id), enrollment_date: req.body.enrollment_date}}};
     var options = { upsert: true };
     db.collection("Enrollments").updateOne(query, update, options);
 
-    update = { $push: {[`Students.${req.body.user_id}`]: {course_id: req.body.course_id, enrollment_date: req.body.enrollment_date}}};
+    update = { $push: {[`Students.${req.body.user_id}`]: {course_id: new ObjectId(req.body.course_id), enrollment_date: req.body.enrollment_date}}};
     db.collection("Enrollments").updateOne(query, update, options)
    
     res.send({message: "ok"})
+});
+
+app.get('/courses/:id/EnrolledUsers', function (req, res) {
+    let enrolled_users = [];
+    db.collection("Enrollments").findOne({}).then((enrolled)=>{
+        if (enrolled && enrolled.Courses[req.params.id]){
+           enrolled.Courses[req.params.id].forEach((user_obj) => {
+            db.collection("Users").findOne({_id: new ObjectId(user_obj.user_id)}).then( (user) => {
+                enrolled_users.push({id: user._id, email: user.email, enrollment_date: user_obj.enrollment_date});
+                if (enrolled_users.length == enrolled.Courses[req.params.id].length)
+                    res.send({enrolled_users: enrolled_users})
+                })
+           })
+        } else {
+            res.send({enrolled_users: []})
+        }
+    })
 });
 
 app.listen(4000,()=>{
