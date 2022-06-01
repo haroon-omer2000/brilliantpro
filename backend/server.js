@@ -28,7 +28,7 @@ app.post('/register_user', function (req, res) {
 app.post('/login_user', function (req, res) {
     db.collection("Users").findOne({email: req.body.email, password: req.body.password}).then( (user) => {
          if (user)
-             res.send({message: "logged_in", user: user.email, role: user.role})
+             res.send({message: "logged_in", user: user.email, role: user.role, id: user._id})
          else
             res.send({message: "INVALID_CREDENTIALS", user: "", role: ""});
     }).catch((err) => {

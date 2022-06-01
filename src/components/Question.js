@@ -5,13 +5,15 @@ const Question = ({question, id}) => {
 
   const [user, setUser] = useState({
     email: null,
-    role: null
+    role: null,
+    id: null
   });
 
   useEffect(() => {
     setUser({
       email: localStorage.getItem('user'),
-      role: localStorage.getItem('role')
+      role: localStorage.getItem('role'),
+      id: localStorage.getItem('user_id')
     });
   },[]);
 

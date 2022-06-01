@@ -9,13 +9,15 @@ const Materials = () => {
   const [materials, setMaterials] = useState([]);
   const [user, setUser] = useState({
     email: null,
-    role: null
+    role: null,
+    id: null
   });
 
   useEffect(() => {
     setUser({
-    email: localStorage.getItem('user'),
-    role: localStorage.getItem('role')
+        email: localStorage.getItem('user'),
+        role: localStorage.getItem('role'),
+        id: localStorage.getItem('user_id')
     });
 
     fetch(`http://localhost:4000/courses/${params.id}/Materials`).then(response => response.json()).then( status => {

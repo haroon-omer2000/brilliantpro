@@ -15,19 +15,17 @@ import Assessments from './components/Assessments';
 import AddAssessment from './components/AddAssessment';
 import Materials from './components/Materials';
 import AddMaterial from './components/AddMaterial';
+import Card from './components/Card';
 
 function App() {
 
   const APP_NAME = 'BrilliantPro';
 
   const [user, setUser] = useState({
-    email: '',
-    role: ''
+    email: null,
+    role: null,
+    id: null
   });
-
-  useEffect(() =>{
-    
-  },[])
 
   return (
     <div>
@@ -47,7 +45,8 @@ function App() {
             <Route path="/Courses/:id/Assessments" exact element = {<Assessments />} />     
             <Route path="/Courses/:id/Assessments/new" exact element = {<AddAssessment />} />  
             <Route path="/Courses/:id/Materials" exact element = {<Materials />} />       
-            <Route path="/Courses/:id/Materials/new" exact element = {<AddMaterial />} />   
+            <Route path="/Courses/:id/Materials/new" exact element = {<AddMaterial />} />  
+            <Route path="/Courses/:id/Payment" exact element = {<Card />} />    
         </Routes>
         </div>
       </Router>

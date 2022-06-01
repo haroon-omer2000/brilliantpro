@@ -8,7 +8,8 @@ const Home = ({user, setUser}) => {
   useEffect(() => {
     setUser({
         email: localStorage.getItem('user'),
-        role: localStorage.getItem('role')
+        role: localStorage.getItem('role'),
+        id: localStorage.getItem('user_id')
     });
   },[])
 

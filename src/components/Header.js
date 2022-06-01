@@ -6,17 +6,20 @@ const Header = ({APP_NAME, user, setUser}) => {
   useEffect(() => {
     setUser({
         email: localStorage.getItem('user'),
-        role: localStorage.getItem('role')
+        role: localStorage.getItem('role'),
+        id: localStorage.getItem('user_id')
     });
   },[])
 
   const logout = async () => {
       setUser({
           email: '',
-          role: ''
+          role: '',
+          id: ''
       });
       localStorage.setItem('user', '');
       localStorage.setItem('role', '');
+      localStorage.setItem('user_id','');
   }
 
   return (

@@ -4,15 +4,17 @@ import { Link } from 'react-router-dom';
 
 const Course = ({id, title, weeks, overview, url, price}) => {
 
- const [user, setUser] = useState({
-   email: null,
-   role: null
- });
+  const [user, setUser] = useState({
+    email: null,
+    role: null,
+    id: null
+  });
 
   useEffect(() => {
     setUser({
         email: localStorage.getItem('user'),
-        role: localStorage.getItem('role')
+        role: localStorage.getItem('role'),
+        id: localStorage.getItem('user_id')
     });
   },[])
 
@@ -38,7 +40,7 @@ const Course = ({id, title, weeks, overview, url, price}) => {
                 </Link>
               </div>
             :
-            <Link className='nav-link' to={"/Courses/" + id} params={{id: id}} >
+            <Link className='nav-link' to={"/Courses/" + id + "/Payment"} params={{id: id}} >
                 <button className="btn btn-primary" type="submit">Enroll</button>
             </Link>
           }
