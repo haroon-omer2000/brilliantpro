@@ -169,6 +169,18 @@ app.post('/courses/:id/Materials/new', function (req, res) {
     });
 });
 
+app.post('/courses/:id/Payment', function (req, res) {
+    var query = {};
+    var update = { $push: {[`Courses.${req.body.course_id}`]: {user_id: req.body.user_id, enrollment_date: req.body.enrollment_date}}};
+    var options = { upsert: true };
+    db.collection("Enrollments").updateOne(query, update, options);
+
+    update = { $push: {[`Students.${req.body.user_id}`]: {course_id: req.body.course_id, enrollment_date: req.body.enrollment_date}}};
+    db.collection("Enrollments").updateOne(query, update, options)
+   
+    res.send({message: "ok"})
+});
+
 app.listen(4000,()=>{
     console.log('Listening on port 4000');
 });
