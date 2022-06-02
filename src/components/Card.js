@@ -15,11 +15,13 @@ const Card = () => {
 
     var today = new Date();
     var enrollment_date = today.getDate()+ '-' + (today.getMonth()+1)+'-' + today.getFullYear();
+    var status = 'incomplete';
 
     const enrollment_info = {
         user_id,
         course_id,
-        enrollment_date
+        enrollment_date,
+        status
     };
 
     fetch(`http://localhost:4000/Courses/${course_id}/Payment`,{

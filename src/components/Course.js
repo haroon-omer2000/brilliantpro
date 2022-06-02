@@ -10,12 +10,20 @@ const Course = ({id, title, weeks, overview, url, price}) => {
     id: null
   });
 
+  const [enrolled, setEnrolled] = useState(false);
+
   useEffect(() => {
     setUser({
         email: localStorage.getItem('user'),
         role: localStorage.getItem('role'),
         id: localStorage.getItem('user_id')
     });
+
+    fetch(`http://localhost:4000/EnrollmentInfo/${id}/${localStorage.getItem('user_id')}`).then(response => response.json()).then( status => {
+      setEnrolled(status['enrollment_info'])
+   });
+
+
   },[])
 
   return (
@@ -39,10 +47,16 @@ const Course = ({id, title, weeks, overview, url, price}) => {
                   <button className="btn btn-primary" type="submit">Edit</button>
                 </Link>
               </div>
+            : (user.role === "student" && !enrolled) ?
+                <Link className='nav-link' to={"/Courses/" + id + "/Payment"} state={{price: price, user_id: user.id, course_id: id}} >
+                    <button className="btn btn-primary" type="submit">Enroll</button>
+                </Link>
+            : (user.role === "student" && enrolled) ?
+              <Link className='nav-link' to={"/Courses/" + id} params={{id: id}} >
+                  <button className="btn btn-primary" type="submit">Go</button>
+              </Link>
             :
-            <Link className='nav-link' to={"/Courses/" + id + "/Payment"} state={{price: price, user_id: user.id, course_id: id}} >
-                <button className="btn btn-primary" type="submit">Enroll</button>
-            </Link>
+              false
           }
         </div>
       </div>

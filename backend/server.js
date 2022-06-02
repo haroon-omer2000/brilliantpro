@@ -171,11 +171,11 @@ app.post('/courses/:id/Materials/new', function (req, res) {
 
 app.post('/courses/:id/Payment', function (req, res) {
     var query = {};
-    var update = { $push: {[`Courses.${req.body.course_id}`]: {user_id: new ObjectId(req.body.user_id), enrollment_date: req.body.enrollment_date}}};
+    var update = { $push: {[`Courses.${req.body.course_id}`]: {user_id: new ObjectId(req.body.user_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
     var options = { upsert: true };
     db.collection("Enrollments").updateOne(query, update, options);
 
-    update = { $push: {[`Students.${req.body.user_id}`]: {course_id: new ObjectId(req.body.course_id), enrollment_date: req.body.enrollment_date}}};
+    update = { $push: {[`Students.${req.body.user_id}`]: {course_id: new ObjectId(req.body.course_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
     db.collection("Enrollments").updateOne(query, update, options)
    
     res.send({message: "ok"})
@@ -204,6 +204,22 @@ app.delete('/Unenroll', function (req, res) {
     db.collection("Enrollments").updateMany({}, {$pull: {[`Courses.${req.body.course_id}`]: {'user_id': new ObjectId(req.body.user_id)}}} )
     db.collection("Enrollments").updateMany({}, {$pull: {[`Students.${req.body.user_id}`]: {'course_id': new ObjectId(req.body.course_id)}}} )
     res.send({message: "ok"})
+});
+
+app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
+    var found = false;
+    await db.collection("Enrollments").findOne({}).then((enrollments) => {
+        if (enrollments.Courses[req.params.id]){
+            enrollments.Courses[req.params.id].forEach((user) => {
+                if ( toString(user.user_id)  == toString(req.params.std_id)){
+                    found = true;
+                }
+            })
+        } 
+        
+    }).then( () => {
+        res.send({enrollment_info: found})
+    })
 });
 
 app.listen(4000,()=>{
