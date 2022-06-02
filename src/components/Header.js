@@ -44,6 +44,16 @@ const Header = ({APP_NAME, user, setUser}) => {
                             :
                                 false
                         }
+                        {
+                            (user.role === "student") ?
+                                <ul className="navbar-nav">
+                                    <Link className='nav-link' to = "/CoursesInfo" state={{id: user.id}}>
+                                            <p className="nav-link">My Courses</p>
+                                    </Link>
+                                </ul>
+                            :
+                                false
+                        }
                         { 
                             (!user.email) ? 
                                 <ul className="navbar-nav">

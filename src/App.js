@@ -17,6 +17,7 @@ import Materials from './components/Materials';
 import AddMaterial from './components/AddMaterial';
 import Card from './components/Card';
 import EnrolledUsers from './components/EnrolledUsers';
+import CoursesInfo from './components/CoursesInfo';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
             <Route path="/" exact element = {<Home user = {user} setUser = {setUser} />} />
             <Route path="/Login" exact element = {<Login setUser = {setUser} />} />
             <Route path="/Register" exact element = {<Register />} />
+            <Route path="/CoursesInfo" exact element = {<CoursesInfo />} />
             <Route path="/AddCourse" exact element = {<AddCourse />} />  
             <Route path="/Courses/:id" exact element = {<DisplayCourse />} />   
             <Route path="/Courses/:id/Update" exact element = {<UpdateCourse />} />      

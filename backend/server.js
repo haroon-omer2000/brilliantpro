@@ -39,9 +39,9 @@ app.post('/login_user', function (req, res) {
 app.get('/courses', function (req, res) {
     let courses = [];
     const cursor = db.collection('Courses').find({});
-    cursor.forEach( function (vehicle) { 
-        courses.push(vehicle)
-    }).then( (data) => {
+    cursor.forEach( function (course) { 
+        courses.push(course)
+    }).then( () => {
         res.send({courses: courses});
     });
 });
@@ -219,6 +219,27 @@ app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
         
     }).then( () => {
         res.send({enrollment_info: found})
+    })
+});
+
+app.get('/users/:id/CourseInfo', function (req, res) {
+    var courses_info = []
+    db.collection("Enrollments").findOne({}).then((enrollments) => {
+        if (enrollments.Students[req.params.id])
+            enrollments.Students[req.params.id].forEach((course_enroll) => {
+                db.collection("Courses").findOne({_id: course_enroll.course_id}).then((course) => {
+                    courses_info.push({
+                        course: course,
+                        enroll_info: course_enroll
+                    })
+                    if (courses_info.length === enrollments.Students[req.params.id].length ) {
+                        res.send({courses_info: courses_info})
+                    }
+                })
+            })
+        else {
+            res.send({courses_info: courses_info})
+        }
     })
 });
 

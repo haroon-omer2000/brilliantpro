@@ -23,7 +23,6 @@ const Course = ({id, title, weeks, overview, url, price}) => {
       setEnrolled(status['enrollment_info'])
    });
 
-
   },[])
 
   return (
