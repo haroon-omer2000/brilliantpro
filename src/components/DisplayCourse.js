@@ -10,6 +10,7 @@ const DisplayCourse = () => {
   const [weeks, setWeeks] = useState(null);
   const [overview, setOverview] = useState(null);
   const [url, setUrl] = useState(null);
+  const [certificate, setCertificate] = useState(null);
   const [user, setUser] = useState({
     email: null,
     role: null,
@@ -28,6 +29,7 @@ const DisplayCourse = () => {
         setWeeks(status['course'].weeks);
         setOverview(status['course'].overview);
         setUrl(status['course'].url);
+        setCertificate(status['course'].certificate);
     });
   },[])
 
@@ -67,6 +69,23 @@ const DisplayCourse = () => {
               <Link className='nav-link' to={"/Courses/" + params.id + "/Materials"} params={{id: params.id}} >
                 <p>Materials</p>
               </Link>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="accordion-item">
+        <h2 className="accordion-header" id="panelsStayOpen-headingFour">
+          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+            Course Certificate
+          </button>
+        </h2>
+        <div id="panelsStayOpen-collapseFour" className="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+          <div className="accordion-body">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <a style={{"textDecoration": "none"}} href={certificate} download rel="noopener noreferrer" target="_blank">
+                View Certificate
+              </a>
             </ul>
           </div>
         </div>

@@ -13,25 +13,37 @@ const AddCourse = () => {
   const [price, setPrice] = useState(5);
   const [overview, setOverview] = useState('');
   const [imageUpload, setImageUpload] = useState(null);
+  const [certificateUpload, setCertificateUpload] = useState(null);
+  const [certificate, setCertificate] = useState(null);
 
   const uploadImage = async(e) => {
     e.preventDefault();
     const imageRef = ref(storage, `course_banners/${imageUpload.name + v4()}`); 
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
         getDownloadURL(snapshot.ref).then( url => {
-            addCourse(url);
+            uploadCertificate(url)
         })
     })
   }
 
-  const addCourse = async(url) => {
+  const uploadCertificate = (url) => {
+    const certificateRef = ref(storage, `course_certificates/${certificateUpload.name + v4()}`); 
+    uploadBytes(certificateRef, certificateUpload).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then( certificate => {
+            addCourse(url, certificate)
+        })
+    })
+  }
+
+  const addCourse = async(url, certificate) => {
     
     const course_info = {
         title,
         weeks,
         overview,
         price,
-        url
+        url,
+        certificate
     };
 
     fetch('http://localhost:4000/add_course',{
@@ -68,6 +80,10 @@ const AddCourse = () => {
             <div>
                 <label htmlFor="formFileLg" className="form-label">Upload course banner</label>
                 <input onChange={(e) => {setImageUpload(e.target.files[0])}} accept=".png,.jpg,.jpeg" required className="form-control form-control-lg" id="formFileLg" type="file"/>
+            </div><br/>
+            <div>
+                <label htmlFor="formFileLg" className="form-label">Upload course certificate</label>
+                <input onChange={(e) => {setCertificateUpload(e.target.files[0])}} accept=".pdf" required className="form-control form-control-lg" id="formFileLg" type="file"/>
             </div><br/>
             <button type="submit" className="btn btn-primary">ADD</button>
         </form>
