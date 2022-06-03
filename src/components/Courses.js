@@ -22,7 +22,7 @@ const Courses = () => {
                  
                 courses.map((course) => {
                     return (
-                        <Course key = {course._id} id = {course._id} title = {course.title} weeks = {course.weeks} overview = {course.overview} url = {course.url} price = {course.price} />
+                        <Course key = {course._id} id = {course._id} title = {course.title} weeks = {course.weeks} overview = {course.overview} url = {course.image} price = {course.price} />
                     )
                 }))
             :

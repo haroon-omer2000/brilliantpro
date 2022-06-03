@@ -28,7 +28,7 @@ const DisplayCourse = () => {
         setTitle(status['course'].title);
         setWeeks(status['course'].weeks);
         setOverview(status['course'].overview);
-        setUrl(status['course'].url);
+        setUrl(status['course'].image);
         setCertificate(status['course'].certificate);
     });
   },[])

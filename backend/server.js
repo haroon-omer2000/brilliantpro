@@ -47,8 +47,9 @@ app.get('/courses', function (req, res) {
 });
 
 app.post('/add_course', function (req, res) {
-    db.collection("Courses").insertOne(req.body);
-    res.send({message:"ok"})
+    db.collection("Courses").insertOne(req.body, function(err){
+        res.send({course_id: req.body._id})
+    });
 });
 
 app.get('/courses/:id', function (req, res) {
@@ -98,8 +99,8 @@ app.post('/courses/:id/Quizzes/new', function (req, res) {
             db.collection("Courses").findOneAndUpdate(
                 { _id: new ObjectId(req.params.id)}, 
                 { $push: { quizzes: new ObjectId(req.body._id) } }
-            ).then((data)=>{
-                res.send({message: "ok"})
+            ).then(()=>{
+                res.send({course_id: req.params.id})
             })
         }
     });

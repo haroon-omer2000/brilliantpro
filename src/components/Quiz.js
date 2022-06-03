@@ -11,6 +11,7 @@ const Quiz = ({quiz}) => {
       <div className="card-body">
         <h5 className="card-title">{quiz.title}</h5>
         <p className="card-text">Total questions: <strong>{quiz.questions.length}</strong></p>
+        <p className="card-text">Maximum attempts: <strong>{quiz.max_attempts}</strong></p>
         <Link to={"/Courses/" + params.id + "/Quizzes/" + quiz._id} params={{id: quiz._id, course_id: params.id}} >
             <p className='btn btn-primary'>Start</p>
         </Link>
