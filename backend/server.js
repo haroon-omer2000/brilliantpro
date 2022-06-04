@@ -217,9 +217,7 @@ app.post('/courses/:id/Progress', async function (req, res) {
                         db.collection("Progress").updateOne({student_id: req.body.user_id, course_id: req.body.course_id},{$set: {assignments: assignments}})
                     }
                 })
-                
             })
-
         } catch (err){}
     }).then(()=>{
         db.collection("Progress").insertOne({
@@ -292,6 +290,66 @@ app.get('/users/:id/CourseInfo', function (req, res) {
         }
     })
 });
+
+app.post('/Courses/Progress', function (req, res) {
+    let total = null;
+    let count = 0;
+    let i = 0;
+    db.collection("Progress").findOne({student_id: req.body.user_id, course_id: req.body.course_id}).then((course)=>{
+        total = course.quizzes.length + course.assignments.length
+        course.quizzes.forEach((quiz)=>{
+            if (quiz.grade === "Passed")
+                count = count + 1;
+            i = i + 1;
+        }) 
+        course.assignments.forEach((assignment)=>{
+            if (assignment.grade === "Passed")
+                count = count + 1;
+            i = i + 1;
+        }) 
+
+        if (i == total){
+            let progress = (count *100)/(total)
+            res.send({progress: Math.round(progress)})
+        }
+    })
+    
+});
+
+
+app.post('/AssignmentCompleted', function (req, res) {
+    db.collection("Progress").updateOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "assignments": { "$elemMatch": { "_id": new ObjectId(req.body.assignment_id) }}
+        },        
+        {
+            "$set": { "assignments.$.grade": "Passed" }
+        }
+    ).then(()=>{
+        res.send({completed: true});
+    })
+});
+
+app.post('/AssignmentCompletedCheck', function (req, res) {
+    let completed = null;
+    db.collection("Progress").findOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "assignments": { "$elemMatch": { "_id": new ObjectId(req.body.assignment_id) }}
+        }).then((course)=>{
+            course.assignments.forEach((assignment)=>{
+                if (new ObjectId(req.body.assignment_id).equals(assignment._id)){
+                    completed =  (assignment.grade === "Passed") ? true : false
+                }
+            })
+            if (completed !== null){
+                console.log(completed,'jjj')
+                res.send({completed: completed})
+            }
+        })
+});
+
 
 app.listen(4000,()=>{
     console.log('Listening on port 4000');

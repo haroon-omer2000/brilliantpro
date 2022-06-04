@@ -40,7 +40,7 @@ const Assessments = () => {
             assessments.length !==0 ?
                 assessments.map((assessment) => {
                     return (
-                        <Assesment key = {assessment._id} assessment = {assessment} />
+                        <Assesment key = {assessment._id} assessment = {assessment} course_id = {params.id} />
                     )
                 })
             : 

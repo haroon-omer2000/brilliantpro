@@ -107,14 +107,6 @@ const AddCourse = () => {
     });
   }
 
-  
-//   const addQuiz = async (e) => {
-//     e.preventDefault();
-
-
-//   }
-
-
   const addCourse = async(image, certificate, url, e) => {
     let published = false;
     const course_info = {
