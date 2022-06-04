@@ -5,6 +5,7 @@ app.use(cors());
 
 let bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+const { async } = require('@firebase/util');
 var ObjectId = mongoose.Types.ObjectId;
 
 var mongoDB = 'mongodb://localhost:27017/Web-Project';
@@ -47,8 +48,9 @@ app.get('/courses', function (req, res) {
 });
 
 app.post('/add_course', function (req, res) {
-    db.collection("Courses").insertOne(req.body);
-    res.send({message:"ok"})
+    db.collection("Courses").insertOne(req.body, function(err){
+        res.send({course_id: req.body._id})
+    });
 });
 
 app.get('/courses/:id', function (req, res) {
@@ -65,6 +67,13 @@ app.put('/courses/:id', function (req, res) {
     .catch( (err) => {
         res.send({message:"Unsuccessful updation"})
     });
+});
+
+app.put('/Courses/:id/Publish', function (req, res) {
+    db.collection("Courses").updateOne({_id: new ObjectId(req.body.courseId)}, {$set: {published: true}}).then(()=> {
+        res.send({message: "okxx"});
+    })
+   
 });
 
 app.get('/courses/:id/Quizzes', function (req, res) {
@@ -98,8 +107,8 @@ app.post('/courses/:id/Quizzes/new', function (req, res) {
             db.collection("Courses").findOneAndUpdate(
                 { _id: new ObjectId(req.params.id)}, 
                 { $push: { quizzes: new ObjectId(req.body._id) } }
-            ).then((data)=>{
-                res.send({message: "ok"})
+            ).then(()=>{
+                res.send({course_id: req.params.id})
             })
         }
     });
@@ -173,13 +182,51 @@ app.post('/courses/:id/Payment', function (req, res) {
     var query = {};
     var update = { $push: {[`Courses.${req.body.course_id}`]: {user_id: new ObjectId(req.body.user_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
     var options = { upsert: true };
-    db.collection("Enrollments").updateOne(query, update, options);
 
-    update = { $push: {[`Students.${req.body.user_id}`]: {course_id: new ObjectId(req.body.course_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
-    db.collection("Enrollments").updateOne(query, update, options)
-   
-    res.send({message: "ok"})
+    db.collection("Enrollments").count({}).then((count)=>{
+        if (count == 0)
+            db.collection("Enrollments").insertOne({});
+        
+        db.collection("Enrollments").updateOne(query, update, options);
+
+        update = { $push: {[`Students.${req.body.user_id}`]: {course_id: new ObjectId(req.body.course_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
+        db.collection("Enrollments").updateOne(query, update, options)
+        
+        res.send({message: "ok"})
+    })
 });
+
+app.post('/courses/:id/Progress', async function (req, res) {
+    let quizzes = []
+    let assignments = []
+    
+    db.collection("Courses").findOne({_id: new ObjectId(req.body.course_id)}).then(async(course)=>{
+        try {
+            course.quizzes.forEach(async(quiz)=>{
+                db.collection("Quizzes").findOne({_id: quiz}).then(async(quiz)=>{
+                    quizzes.push({_id: quiz._id, title: quiz.title, max_attempts: quiz.max_attempts, attempts: 0, grade: 'None'})
+                    if (quizzes.length === course.quizzes.length){
+                        db.collection("Progress").updateOne({student_id: req.body.user_id, course_id: req.body.course_id},{$set: {quizzes: quizzes}})
+                    }    
+                })
+            })
+            course.assessments.forEach(async(assessment)=>{
+                db.collection("Assessments").findOne({_id: assessment}).then(async(assessment)=>{
+                    assignments.push({_id: assessment._id, title: assessment.title, grade: 'None'})
+                    if (assignments.length === course.assessments.length){
+                        db.collection("Progress").updateOne({student_id: req.body.user_id, course_id: req.body.course_id},{$set: {assignments: assignments}})
+                    }
+                })
+            })
+        } catch (err){}
+    }).then(()=>{
+        db.collection("Progress").insertOne({
+            student_id: req.body.user_id,
+            course_id: req.body.course_id
+        }).then(()=>{
+            res.send({message: "ok"})
+        })    
+    })});
 
 app.get('/courses/:id/EnrolledUsers', function (req, res) {
     let enrolled_users = [];
@@ -209,14 +256,15 @@ app.delete('/Unenroll', function (req, res) {
 app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
     var found = false;
     await db.collection("Enrollments").findOne({}).then((enrollments) => {
-        if (enrollments.Courses[req.params.id]){
-            enrollments.Courses[req.params.id].forEach((user) => {
-                if ( toString(user.user_id)  == toString(req.params.std_id)){
-                    found = true;
-                }
-            })
-        } 
-        
+        try {
+            if (enrollments.Courses[req.params.id]){
+                enrollments.Courses[req.params.id].forEach((user) => {
+                    if ( toString(user.user_id)  == toString(req.params.std_id)){
+                        found = true;
+                    }
+                })
+            } 
+        } catch (err) {}
     }).then( () => {
         res.send({enrollment_info: found})
     })
@@ -242,6 +290,66 @@ app.get('/users/:id/CourseInfo', function (req, res) {
         }
     })
 });
+
+app.post('/Courses/Progress', function (req, res) {
+    let total = null;
+    let count = 0;
+    let i = 0;
+    db.collection("Progress").findOne({student_id: req.body.user_id, course_id: req.body.course_id}).then((course)=>{
+        total = course.quizzes.length + course.assignments.length
+        course.quizzes.forEach((quiz)=>{
+            if (quiz.grade === "Passed")
+                count = count + 1;
+            i = i + 1;
+        }) 
+        course.assignments.forEach((assignment)=>{
+            if (assignment.grade === "Passed")
+                count = count + 1;
+            i = i + 1;
+        }) 
+
+        if (i == total){
+            let progress = (count *100)/(total)
+            res.send({progress: Math.round(progress)})
+        }
+    })
+    
+});
+
+
+app.post('/AssignmentCompleted', function (req, res) {
+    db.collection("Progress").updateOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "assignments": { "$elemMatch": { "_id": new ObjectId(req.body.assignment_id) }}
+        },        
+        {
+            "$set": { "assignments.$.grade": "Passed" }
+        }
+    ).then(()=>{
+        res.send({completed: true});
+    })
+});
+
+app.post('/AssignmentCompletedCheck', function (req, res) {
+    let completed = null;
+    db.collection("Progress").findOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "assignments": { "$elemMatch": { "_id": new ObjectId(req.body.assignment_id) }}
+        }).then((course)=>{
+            course.assignments.forEach((assignment)=>{
+                if (new ObjectId(req.body.assignment_id).equals(assignment._id)){
+                    completed =  (assignment.grade === "Passed") ? true : false
+                }
+            })
+            if (completed !== null){
+                console.log(completed,'jjj')
+                res.send({completed: completed})
+            }
+        })
+});
+
 
 app.listen(4000,()=>{
     console.log('Listening on port 4000');
