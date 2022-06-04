@@ -5,6 +5,7 @@ app.use(cors());
 
 let bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+const { async } = require('@firebase/util');
 var ObjectId = mongoose.Types.ObjectId;
 
 var mongoDB = 'mongodb://localhost:27017/Web-Project';
@@ -181,37 +182,53 @@ app.post('/courses/:id/Payment', function (req, res) {
     var query = {};
     var update = { $push: {[`Courses.${req.body.course_id}`]: {user_id: new ObjectId(req.body.user_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
     var options = { upsert: true };
-    db.collection("Enrollments").updateOne(query, update, options);
 
-    update = { $push: {[`Students.${req.body.user_id}`]: {course_id: new ObjectId(req.body.course_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
-    db.collection("Enrollments").updateOne(query, update, options)
-   
-    res.send({message: "ok"})
+    db.collection("Enrollments").count({}).then((count)=>{
+        if (count == 0)
+            db.collection("Enrollments").insertOne({});
+        
+        db.collection("Enrollments").updateOne(query, update, options);
+
+        update = { $push: {[`Students.${req.body.user_id}`]: {course_id: new ObjectId(req.body.course_id), enrollment_date: req.body.enrollment_date, status: req.body.status}}};
+        db.collection("Enrollments").updateOne(query, update, options)
+        
+        res.send({message: "ok"})
+    })
 });
 
-app.post('/courses/:id/Progress', function (req, res) {
+app.post('/courses/:id/Progress', async function (req, res) {
     let quizzes = []
     let assignments = []
-    db.collection("Courses").findOne({_id: new ObjectId(req.body.course_id)}).then((course)=>{
-        course.quizzes.forEach((quiz)=>{
-            db.collection("Quizzes").findOne({_id: quiz}).then((quiz)=>{
-                quizzes.push({_id: quiz._id, title: quiz.title, max_attempts: quiz.max_attempts, attempts: 0, grade: 'None'})
+    
+    db.collection("Courses").findOne({_id: new ObjectId(req.body.course_id)}).then(async(course)=>{
+        try {
+            course.quizzes.forEach(async(quiz)=>{
+                db.collection("Quizzes").findOne({_id: quiz}).then(async(quiz)=>{
+                    quizzes.push({_id: quiz._id, title: quiz.title, max_attempts: quiz.max_attempts, attempts: 0, grade: 'None'})
+                    if (quizzes.length === course.quizzes.length){
+                        db.collection("Progress").updateOne({student_id: req.body.user_id, course_id: req.body.course_id},{$set: {quizzes: quizzes}})
+                    }    
+                })
             })
-        })
-        course.assessments.forEach((assessment)=>{
-            db.collection("Assessments").findOne({_id: assessment}).then((assessment)=>{
-                assignments.push({_id: assessment._id, title: assessment.title, grade: 'None'})
+            course.assessments.forEach(async(assessment)=>{
+                db.collection("Assessments").findOne({_id: assessment}).then(async(assessment)=>{
+                    assignments.push({_id: assessment._id, title: assessment.title, grade: 'None'})
+                    if (assignments.length === course.assessments.length){
+                        db.collection("Progress").updateOne({student_id: req.body.user_id, course_id: req.body.course_id},{$set: {assignments: assignments}})
+                    }
+                })
+                
             })
-        })
+
+        } catch (err){}
     }).then(()=>{
         db.collection("Progress").insertOne({
             student_id: req.body.user_id,
-            course_id: req.body.course_id,
-            quizzes: quizzes,
-            assignments: assignments
-        })
-    })
-});
+            course_id: req.body.course_id
+        }).then(()=>{
+            res.send({message: "ok"})
+        })    
+    })});
 
 app.get('/courses/:id/EnrolledUsers', function (req, res) {
     let enrolled_users = [];
@@ -241,14 +258,15 @@ app.delete('/Unenroll', function (req, res) {
 app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
     var found = false;
     await db.collection("Enrollments").findOne({}).then((enrollments) => {
-        if (enrollments.Courses[req.params.id]){
-            enrollments.Courses[req.params.id].forEach((user) => {
-                if ( toString(user.user_id)  == toString(req.params.std_id)){
-                    found = true;
-                }
-            })
-        } 
-        
+        try {
+            if (enrollments.Courses[req.params.id]){
+                enrollments.Courses[req.params.id].forEach((user) => {
+                    if ( toString(user.user_id)  == toString(req.params.std_id)){
+                        found = true;
+                    }
+                })
+            } 
+        } catch (err) {}
     }).then( () => {
         res.send({enrollment_info: found})
     })
