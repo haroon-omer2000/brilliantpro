@@ -9,6 +9,7 @@ const AddQuiz = () => {
   const navigate = useNavigate();  
 
   const [title, setTitle] = useState('');
+  const [maxAttempts, setMaxAttempts] = useState(1);
   const [questions, setQuestions] = useState([
       {
           question: "",
@@ -66,10 +67,11 @@ const AddQuiz = () => {
 
   const addQuiz = async (e) => {
     e.preventDefault();
-
+    let max_attempts = parseInt(maxAttempts);
     const quiz_data = {
         title,
-        questions
+        questions,
+        max_attempts
     };
 
     fetch(`http://localhost:4000/Courses/${params.id}/Quizzes/new`,{
@@ -128,6 +130,10 @@ const AddQuiz = () => {
                     : 
                         false
             }
+            </div>
+            <div className="mb-3">
+              <label className="form-label" htmlFor="max_attempts">Max Attempts (1 - 3):</label>
+              <input onChange={(e) => setMaxAttempts(e.target.value)} className="form-control" value={maxAttempts} required type="number" id="max_attempts" name="max_attempts" min="1" max="3" />
             </div>
             <button className='btn btn-primary' type='submit'>ADD</button>
         </form>

@@ -30,9 +30,19 @@ const Card = () => {
         "Content-Type":"application/json"
     },
     body: JSON.stringify(enrollment_info)
-    }).then(response => response.json()).then(status => {
-    navigate(-1);
-    });
+    }).then(response => response.json()).then( () => {
+
+      fetch(`http://localhost:4000/Courses/${course_id}/Progress`,{
+      method: "POST",
+      headers: {
+          "Content-Type":"application/json"
+      },
+      body: JSON.stringify(enrollment_info)
+      }).then(response => response.json()).then(status => {
+        navigate(-1);
+      });
+
+  });
 
 }
       

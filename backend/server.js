@@ -189,6 +189,30 @@ app.post('/courses/:id/Payment', function (req, res) {
     res.send({message: "ok"})
 });
 
+app.post('/courses/:id/Progress', function (req, res) {
+    let quizzes = []
+    let assignments = []
+    db.collection("Courses").findOne({_id: new ObjectId(req.body.course_id)}).then((course)=>{
+        course.quizzes.forEach((quiz)=>{
+            db.collection("Quizzes").findOne({_id: quiz}).then((quiz)=>{
+                quizzes.push({_id: quiz._id, title: quiz.title, max_attempts: quiz.max_attempts, attempts: 0, grade: 'None'})
+            })
+        })
+        course.assessments.forEach((assessment)=>{
+            db.collection("Assessments").findOne({_id: assessment}).then((assessment)=>{
+                assignments.push({_id: assessment._id, title: assessment.title, grade: 'None'})
+            })
+        })
+    }).then(()=>{
+        db.collection("Progress").insertOne({
+            student_id: req.body.user_id,
+            course_id: req.body.course_id,
+            quizzes: quizzes,
+            assignments: assignments
+        })
+    })
+});
+
 app.get('/courses/:id/EnrolledUsers', function (req, res) {
     let enrolled_users = [];
     db.collection("Enrollments").findOne({}).then((enrolled)=>{

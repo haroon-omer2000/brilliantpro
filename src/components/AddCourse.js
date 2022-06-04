@@ -207,7 +207,7 @@ const AddCourse = () => {
             </div>
             <div className="mb-3">
               <label className="form-label" htmlFor="max_attempts">Max Attempts (1 - 3):</label>
-              <input onChange={(e) => setMaxAttempts(e.target.value)} className="form-control" required type="number" id="max_attempts" name="max_attempts" min="1" max="3" />
+              <input onChange={(e) => setMaxAttempts(e.target.value)} className="form-control" value={maxAttempts} required type="number" id="max_attempts" name="max_attempts" min="1" max="3" />
             </div>
             <button type='button' onClick={addQuestion} className='btn btn-info quiz-title'>Add Question</button>
             <div>

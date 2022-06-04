@@ -44,15 +44,15 @@ const DisplayCourse = () => {
       courseId
     }
 
-  fetch(`http://localhost:4000/Courses/${courseId}/Publish`,{
-      method: "PUT",
-      headers: {
-          "Content-Type":"application/json"
-      },
-      body: JSON.stringify(publish_course)
-  }).then(response => response.json()).then(status => {
-        navigate(-1);
-    });
+    fetch(`http://localhost:4000/Courses/${courseId}/Publish`,{
+        method: "PUT",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify(publish_course)
+    }).then(response => response.json()).then(status => {
+          navigate(-1);
+      });
   }
 
   return (
