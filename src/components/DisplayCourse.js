@@ -1,16 +1,20 @@
+import { async } from '@firebase/util';
 import React, {useEffect, useState} from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import '../styles/Courses.css'
 
 const DisplayCourse = () => {
   
   const params = useParams();
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState(null);
   const [weeks, setWeeks] = useState(null);
   const [overview, setOverview] = useState(null);
   const [url, setUrl] = useState(null);
   const [certificate, setCertificate] = useState(null);
+  const [published, setPublished] = useState(null);
+  const [courseId, setCourseId] = useState(null);
   const [user, setUser] = useState({
     email: null,
     role: null,
@@ -30,8 +34,26 @@ const DisplayCourse = () => {
         setOverview(status['course'].overview);
         setUrl(status['course'].image);
         setCertificate(status['course'].certificate);
+        setPublished(status['course'].published);
+        setCourseId(status['course']._id);
     });
   },[])
+
+  const publishCourse = async () => {
+    let publish_course = {
+      courseId
+    }
+
+  fetch(`http://localhost:4000/Courses/${courseId}/Publish`,{
+      method: "PUT",
+      headers: {
+          "Content-Type":"application/json"
+      },
+      body: JSON.stringify(publish_course)
+  }).then(response => response.json()).then(status => {
+        navigate(-1);
+    });
+  }
 
   return (
     <div className="accordion" id="accordionPanelsStayOpenExample">
@@ -48,6 +70,12 @@ const DisplayCourse = () => {
               <strong className='course-show-heading'>Overview</strong>{overview}
               <p><strong className='course-show-heading'>Weeks to complete: </strong>{weeks}</p>
             </div>
+            {
+              (user.role === "admin" && !published) ? 
+                <button onClick={publishCourse} className='btn btn-primary'>Publish</button> 
+              :
+                false
+            }
           </div>
         </div>
       </div>

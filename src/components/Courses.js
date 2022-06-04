@@ -21,9 +21,11 @@ const Courses = () => {
             (courses.length !== 0) ? (
                  
                 courses.map((course) => {
-                    return (
-                        <Course key = {course._id} id = {course._id} title = {course.title} weeks = {course.weeks} overview = {course.overview} url = {course.image} price = {course.price} />
-                    )
+                    if (course.published || localStorage.getItem('role') === "admin"){
+                      return (
+                          <Course key = {course._id} id = {course._id} title = {course.title} weeks = {course.weeks} overview = {course.overview} url = {course.image} price = {course.price} />
+                      )
+                    }
                 }))
             :
                 <Notice notice = {"There are no available courses"} style_notice = {"alert alert-warning"} />

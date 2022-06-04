@@ -116,14 +116,15 @@ const AddCourse = () => {
 
 
   const addCourse = async(image, certificate, url, e) => {
-    
+    let published = false;
     const course_info = {
         title,
         weeks,
         overview,
         price,
         image,
-        certificate
+        certificate,
+        published
     };
 
     fetch('http://localhost:4000/add_course',{

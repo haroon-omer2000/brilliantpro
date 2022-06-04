@@ -68,6 +68,13 @@ app.put('/courses/:id', function (req, res) {
     });
 });
 
+app.put('/Courses/:id/Publish', function (req, res) {
+    db.collection("Courses").updateOne({_id: new ObjectId(req.body.courseId)}, {$set: {published: true}}).then(()=> {
+        res.send({message: "okxx"});
+    })
+   
+});
+
 app.get('/courses/:id/Quizzes', function (req, res) {
     let quizzes = [];
     db.collection("Courses").findOne({_id: new ObjectId(req.params.id)}).then( (course) => {
