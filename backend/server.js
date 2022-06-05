@@ -295,6 +295,7 @@ app.post('/Courses/Progress', function (req, res) {
     let total = null;
     let count = 0;
     let i = 0;
+
     db.collection("Progress").findOne({student_id: req.body.user_id, course_id: req.body.course_id}).then((course)=>{
         total = course.quizzes.length + course.assignments.length
         course.quizzes.forEach((quiz)=>{
@@ -340,14 +341,74 @@ app.post('/AssignmentCompletedCheck', function (req, res) {
         }).then((course)=>{
             course.assignments.forEach((assignment)=>{
                 if (new ObjectId(req.body.assignment_id).equals(assignment._id)){
-                    completed =  (assignment.grade === "Passed") ? true : false
+                    completed = (assignment.grade === "Passed") ? true : false
                 }
             })
             if (completed !== null){
-                console.log(completed,'jjj')
                 res.send({completed: completed})
             }
         })
+});
+
+app.post('/Courses/Quizzes/Attempts', function (req, res) {
+    db.collection("Progress").findOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "quizzes": { "$elemMatch": { "_id": new ObjectId(req.body.quiz_id) }}
+    }).then((course)=>{
+        course.quizzes.forEach((quiz)=>{
+            if (new ObjectId(req.body.quiz_id).equals(quiz._id)){
+                res.send({attempts: quiz.attempts, grade: quiz.grade});
+            }
+        })
+    })
+});
+
+app.post('/Courses/Quiz/Submission', function (req, res) {
+    var quiz_data = req.body;
+    let score = 0;
+    quiz_data.questions.forEach((question) => {
+        quiz_data.answers.forEach((answer)=>{
+            if (question.question == answer.question){
+                question.options.forEach((option) => {
+                    if (option.option === answer.answer && option.correct){
+                        score = score + 1;
+                    }
+                })
+            }
+        })
+    })
+
+    let new_grade = ((score*100)/(quiz_data.answers.length) >= 75.0) ? "Passed" : "Failed"
+    var grade = null;
+
+    db.collection("Progress").findOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "quizzes": { "$elemMatch": { "_id": new ObjectId(req.body.quiz_id) }}   
+    }).then((course)=>{
+        course.quizzes.forEach((quiz)=>{
+            if (new ObjectId(req.body.quiz_id).equals(quiz._id)){
+                grade = quiz.grade; 
+            }
+        })
+    }).then(()=>{
+        new_grade = (grade === "Passed") ? grade : new_grade
+
+        db.collection("Progress").updateOne({
+            student_id: req.body.user_id, 
+            course_id: req.body.course_id, 
+            "quizzes": { "$elemMatch": { "_id": new ObjectId(req.body.quiz_id) }}
+            },        
+            {
+             "$inc" : {'quizzes.$.attempts' : 1},
+             "$set" : {'quizzes.$.grade' : new_grade}
+            }
+        ).then(()=>{
+            res.send({message: "ok"})
+        })
+    })
+    
 });
 
 

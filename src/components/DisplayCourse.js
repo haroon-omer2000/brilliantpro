@@ -124,22 +124,28 @@ const DisplayCourse = () => {
         </div>
       </div>
 
-      <div className="accordion-item">
-        <h2 className="accordion-header" id="panelsStayOpen-headingFour">
-          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-            Course Certificate
-          </button>
-        </h2>
-        <div id="panelsStayOpen-collapseFour" className="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
-          <div className="accordion-body">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <a style={{"textDecoration": "none"}} href={certificate} download rel="noopener noreferrer" target="_blank">
-                View Certificate
-              </a>
-            </ul>
+      {
+        (progress === 100) ?
+          <div className="accordion-item">
+            <h2 className="accordion-header" id="panelsStayOpen-headingFour">
+              <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                Course Certificate
+              </button>
+            </h2>
+            <div id="panelsStayOpen-collapseFour" className="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+              <div className="accordion-body">
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <a style={{"textDecoration": "none"}} href={certificate} download rel="noopener noreferrer" target="_blank">
+                    View Certificate
+                  </a>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        :
+          false
+      }
+      
 
       {
         (user.role === "admin") ?
