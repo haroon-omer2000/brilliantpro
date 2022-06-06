@@ -273,6 +273,7 @@ app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
 app.get('/users/:id/CourseInfo', function (req, res) {
     var courses_info = []
     db.collection("Enrollments").findOne({}).then((enrollments) => {
+        try { 
         if (enrollments.Students[req.params.id])
             enrollments.Students[req.params.id].forEach((course_enroll) => {
                 db.collection("Courses").findOne({_id: course_enroll.course_id}).then((course) => {
@@ -286,6 +287,10 @@ app.get('/users/:id/CourseInfo', function (req, res) {
                 })
             })
         else {
+            res.send({courses_info: courses_info})
+        }
+        }
+        catch(err) {
             res.send({courses_info: courses_info})
         }
     })
