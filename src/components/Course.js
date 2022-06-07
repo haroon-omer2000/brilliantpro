@@ -20,8 +20,8 @@ const Course = ({id, title, weeks, overview, url, price}) => {
     });
 
     fetch(`http://localhost:4000/EnrollmentInfo/${id}/${localStorage.getItem('user_id')}`).then(response => response.json()).then( status => {
-      setEnrolled(status['enrollment_info'])
-   });
+      setEnrolled(status['enrollment_info']);
+    });
 
   },[])
 

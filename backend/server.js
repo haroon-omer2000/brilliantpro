@@ -259,12 +259,14 @@ app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
         try {
             if (enrollments.Courses[req.params.id]){
                 enrollments.Courses[req.params.id].forEach((user) => {
-                    if ( toString(user.user_id)  == toString(req.params.std_id)){
+                    if (new ObjectId(user.user_id).equals(req.params.std_id)){
                         found = true;
                     }
                 })
             } 
-        } catch (err) {}
+        } catch (err) {
+            res.send({enrollment_info: found})
+        }
     }).then( () => {
         res.send({enrollment_info: found})
     })
