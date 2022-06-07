@@ -127,7 +127,7 @@ const AddCourse = () => {
         body: JSON.stringify(course_info)
     }).then(response => response.json()).then(status => {
         let title = quizTitle; 
-        let max_attempts = maxAttempts;
+        let max_attempts = parseInt(maxAttempts);
         const quiz_data = {
             title,
             questions,

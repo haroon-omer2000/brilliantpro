@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/Quizzes.css'
 
-const Question = ({question, id}) => {
+const Question = ({question, id, setAnswers}) => {
 
   const [user, setUser] = useState({
     email: null,
@@ -17,6 +17,10 @@ const Question = ({question, id}) => {
     });
   },[]);
 
+  const setAnswer = (e, question) => {
+    setAnswers((prev) => [...prev,{question: question, answer: e.target.value}])
+  }
+
   return (
     <div className="question">
         <p><strong>{id}. </strong>{question.question}</p>
@@ -24,7 +28,7 @@ const Question = ({question, id}) => {
             question.options.map((option, i) => {
                 return (
                     <div key = {i} className="form-check">
-                        <input className="form-check-input" type="radio" name={question.question}   />
+                        <input onChange={(e)=> setAnswer(e, question.question)} required className="form-check-input" value={option.option} type="radio" name={question.question}   />
                         <label className="form-check-label quiz-correct" htmlFor="exampleRadios1">
                             {option.option}
                             {
@@ -33,7 +37,6 @@ const Question = ({question, id}) => {
                                 : false
                             }
                         </label>
-                        
                     </div>
                 )
             })

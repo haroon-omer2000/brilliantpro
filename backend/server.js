@@ -259,12 +259,14 @@ app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
         try {
             if (enrollments.Courses[req.params.id]){
                 enrollments.Courses[req.params.id].forEach((user) => {
-                    if ( toString(user.user_id)  == toString(req.params.std_id)){
+                    if (new ObjectId(user.user_id).equals(req.params.std_id)){
                         found = true;
                     }
                 })
             } 
-        } catch (err) {}
+        } catch (err) {
+            res.send({enrollment_info: found})
+        }
     }).then( () => {
         res.send({enrollment_info: found})
     })
@@ -273,6 +275,7 @@ app.get('/EnrollmentInfo/:id/:std_id',  async function (req, res) {
 app.get('/users/:id/CourseInfo', function (req, res) {
     var courses_info = []
     db.collection("Enrollments").findOne({}).then((enrollments) => {
+        try { 
         if (enrollments.Students[req.params.id])
             enrollments.Students[req.params.id].forEach((course_enroll) => {
                 db.collection("Courses").findOne({_id: course_enroll.course_id}).then((course) => {
@@ -288,6 +291,10 @@ app.get('/users/:id/CourseInfo', function (req, res) {
         else {
             res.send({courses_info: courses_info})
         }
+        }
+        catch(err) {
+            res.send({courses_info: courses_info})
+        }
     })
 });
 
@@ -295,6 +302,7 @@ app.post('/Courses/Progress', function (req, res) {
     let total = null;
     let count = 0;
     let i = 0;
+
     db.collection("Progress").findOne({student_id: req.body.user_id, course_id: req.body.course_id}).then((course)=>{
         total = course.quizzes.length + course.assignments.length
         course.quizzes.forEach((quiz)=>{
@@ -340,14 +348,74 @@ app.post('/AssignmentCompletedCheck', function (req, res) {
         }).then((course)=>{
             course.assignments.forEach((assignment)=>{
                 if (new ObjectId(req.body.assignment_id).equals(assignment._id)){
-                    completed =  (assignment.grade === "Passed") ? true : false
+                    completed = (assignment.grade === "Passed") ? true : false
                 }
             })
             if (completed !== null){
-                console.log(completed,'jjj')
                 res.send({completed: completed})
             }
         })
+});
+
+app.post('/Courses/Quizzes/Attempts', function (req, res) {
+    db.collection("Progress").findOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "quizzes": { "$elemMatch": { "_id": new ObjectId(req.body.quiz_id) }}
+    }).then((course)=>{
+        course.quizzes.forEach((quiz)=>{
+            if (new ObjectId(req.body.quiz_id).equals(quiz._id)){
+                res.send({attempts: quiz.attempts, grade: quiz.grade});
+            }
+        })
+    })
+});
+
+app.post('/Courses/Quiz/Submission', function (req, res) {
+    var quiz_data = req.body;
+    let score = 0;
+    quiz_data.questions.forEach((question) => {
+        quiz_data.answers.forEach((answer)=>{
+            if (question.question == answer.question){
+                question.options.forEach((option) => {
+                    if (option.option === answer.answer && option.correct){
+                        score = score + 1;
+                    }
+                })
+            }
+        })
+    })
+
+    let new_grade = ((score*100)/(quiz_data.answers.length) >= 75.0) ? "Passed" : "Failed"
+    var grade = null;
+
+    db.collection("Progress").findOne({
+        student_id: req.body.user_id, 
+        course_id: req.body.course_id, 
+        "quizzes": { "$elemMatch": { "_id": new ObjectId(req.body.quiz_id) }}   
+    }).then((course)=>{
+        course.quizzes.forEach((quiz)=>{
+            if (new ObjectId(req.body.quiz_id).equals(quiz._id)){
+                grade = quiz.grade; 
+            }
+        })
+    }).then(()=>{
+        new_grade = (grade === "Passed") ? grade : new_grade
+
+        db.collection("Progress").updateOne({
+            student_id: req.body.user_id, 
+            course_id: req.body.course_id, 
+            "quizzes": { "$elemMatch": { "_id": new ObjectId(req.body.quiz_id) }}
+            },        
+            {
+             "$inc" : {'quizzes.$.attempts' : 1},
+             "$set" : {'quizzes.$.grade' : new_grade}
+            }
+        ).then(()=>{
+            res.send({message: "ok"})
+        })
+    })
+    
 });
 
 
